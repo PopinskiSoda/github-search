@@ -19,7 +19,7 @@ const searchReducer = (state = initState, action) => {
 		case 'SELECT_USER':
 			return {
 				...state,
-				test: 'test'
+				selectedUser: action.userLogin
 			}
 
 		default: 

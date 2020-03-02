@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers/rootReducer';
-import { searchSaga } from './sagas';
+import watchSaga from './sagas';
 
 import createSagaMiddleware from 'redux-saga';
 
@@ -19,7 +19,7 @@ const store = createStore(
 	applyMiddleware(sagaMiddleware)
 );
 
-sagaMiddleware.run(searchSaga);
+sagaMiddleware.run(watchSaga);
 
 render(
 	<Provider store={store}>

@@ -4,16 +4,28 @@ const initState = {
 
 const listReducer = (state = initState, action) => {
 	switch (action.type) {
-		case 'SORT_ASC':
+		// case 'SORT_ASC':
+		// 	return {
+		// 		...state,
+		// 		test: 'test'
+		// 	}
+
+		// case 'SORT_DESC':
+		// 	return {
+		// 		...state,
+		// 		test: 'test'
+		// 	}
+
+		case 'FETCH_REPOS_BY_USER_SUCCEEDED':
+			console.log(action.response);
 			return {
 				...state,
-				test: 'test'
+				repos: action.response
 			}
 
-		case 'SORT_DESC':
+		case 'FETCH_REPOS_BY_USER_FAILED':
 			return {
-				...state,
-				test: 'test'
+				...state
 			}
 
 		case 'SELECT_NEXT_PAGE':

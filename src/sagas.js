@@ -1,8 +1,11 @@
-import { takeLatest, call, put } from 'redux-saga/effects';
+import { takeLatest, call, put, all } from 'redux-saga/effects';
 
-export function* searchSaga() {
-	yield takeLatest('FETCH_USERS_REQUESTED', searchUsers);
-} 
+export default function* watchSaga() {
+	yield all([
+		takeLatest('FETCH_USERS_REQUESTED', searchUsers),
+		takeLatest('FETCH_REPOS_BY_USER_REQUESTED', getRepos)
+	]);
+}
 
 function* searchUsers(action) {
 	try {
@@ -15,6 +18,21 @@ function* searchUsers(action) {
 
 function fetchUsersByPrefix(prefix) {
 	return fetch(`https://api.github.com/search/users?q=${prefix}`).then(response =>
+		response.json()
+	);
+}
+
+function* getRepos(action) {
+	try {
+		const response = yield call(fetchReposByUserLogin, action.userLogin);
+		yield put({type: 'FETCH_REPOS_BY_USER_SUCCEEDED', response: response});
+	} catch (e) {
+		yield put({type: 'FETCH_REPOS_BY_USER_FAILED', message: e.message});
+	}
+}
+
+function fetchReposByUserLogin(userLogin) {
+	return fetch(`https://api.github.com/users/${userLogin}/repos?per_page=100`).then(response =>
 		response.json()
 	);
 }

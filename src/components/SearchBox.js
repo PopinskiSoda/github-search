@@ -27,7 +27,7 @@ const SearchBox = () => {
 
 	const handleSelect = () => {
 		if (searchValue.length >= MIN_SEARCH_LENGTH) {
-			dispatch({type: 'FETCH_REPOS_BY_USER_REQUESTED', userLogin: searchValue});
+			dispatch({type: 'FETCH_REPOS_REQUESTED', userLogin: searchValue});
 		}
 	}
 	

@@ -24,14 +24,14 @@ function fetchUsersByPrefix(prefix) {
 
 function* getRepos(action) {
 	try {
-		const response = yield call(fetchReposByUserLogin, action.userLogin);
-		yield put({type: 'FETCH_REPOS_BY_USER_SUCCEEDED', response: response});
+		const response = yield call(fetchRepos, action.userLogin);
+		yield put({type: 'FETCH_REPOS_SUCCEEDED', response: response});
 	} catch (e) {
-		yield put({type: 'FETCH_REPOS_BY_USER_FAILED', message: e.message});
+		yield put({type: 'FETCH_REPOS_FAILED', message: e.message});
 	}
 }
 
-function fetchReposByUserLogin(userLogin) {
+function fetchRepos(userLogin) {
 	return fetch(`https://api.github.com/users/${userLogin}/repos?per_page=100`).then(response =>
 		response.json()
 	);

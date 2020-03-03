@@ -1,38 +1,40 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
-const createData = (name, stars) => { return { name, stars }}
-
-// const rows = [
-// 	createData('Test1', 1337),
-// 	createData('Test2', 1338),
-// 	createData('Test3', 1339),
-// 	createData('Test4', 13310),
-// 	createData('Test5', 133123),
-// 	createData('Test6', 1312337),
-// 	createData('Test7', 55132337)
-// ]
-
 const ReposTable = () => {
+	const repos = useSelector(state => state.reposList.repos);
+	const dispatch = useDispatch();
+
+	const dateHelper = (UTCString) => (new Date(UTCString)).toLocaleDateString();
+
 	return (
 		<Table>
 			<TableHead>
 				<TableRow>
-					<TableCell>
-						headTest
-					</TableCell>
+					<TableCell>Login</TableCell>
+					<TableCell>Language</TableCell>
+					<TableCell>Created at</TableCell>
+					<TableCell>Updated at</TableCell>
+					<TableCell>Pushed at</TableCell>
 				</TableRow>
 			</TableHead>
 			<TableBody>
-				<TableRow>
-					<TableCell>
-						bodyTest
-					</TableCell>
-				</TableRow>
+				{repos.map((row) => {
+					return (
+						<TableRow key={row.id}>
+							<TableCell>{row.name}</TableCell>
+							<TableCell>{row.language}</TableCell>
+							<TableCell>{dateHelper(row.created_at)}</TableCell>
+							<TableCell>{dateHelper(row.updated_at)}</TableCell>
+							<TableCell>{dateHelper(row.pushed_at)}</TableCell>
+						</TableRow>
+					)
+				})}
 			</TableBody>
 		</Table>
 	);

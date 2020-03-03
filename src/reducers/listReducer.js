@@ -1,31 +1,30 @@
 const initState = {
-	repos: []
+	currentUserLogin: null,
+	currentPage: 1,
+	1: [],
+	rowsPerPage: 5
 }
 
 const listReducer = (state = initState, action) => {
 	switch (action.type) {
 
+		case 'FETCH_REPOS_REQUESTED':
+			return {
+				...state,
+				currentUserLogin: action.userLogin || state.currentUserLogin
+			}
+
 		case 'FETCH_REPOS_SUCCEEDED':
 			return {
 				...state,
-				repos: action.response
+				[action.page]: action.response,
+				currentPage: action.page || state.currentPage
 			}
 
-		case 'FETCH_REPOS_FAILED':
-			return {
-				...state
-			}
-
-		case 'SELECT_NEXT_PAGE':
+		case 'SET_ROWS_PER_PAGE_AMOUNT':
 			return {
 				...state,
-				test: 'test'
-			}
-
-		case 'SELECT_PREVIOUS_PAGE':
-			return {
-				...state,
-				test: 'test'
+				rowsPerPage: action.amount
 			}
 
 		default:

@@ -6,6 +6,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TablePagination from '@material-ui/core/TablePagination';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 
 const ReposTable = () => {
@@ -13,14 +14,14 @@ const ReposTable = () => {
 
 	const currentPage = useSelector(state => state.reposList.currentPage);
 	const repos = useSelector(state => state.reposList[currentPage]);
-	console.log(currentPage);
-	console.log(useSelector(state => state.reposList));
 	const rowsPerPage = useSelector(state => state.reposList.rowsPerPage);
+	const sortDirection = useSelector(state => state.reposList.sort.direction);
+	const orderBy = useSelector(state => state.reposList.sort.orderBy);
 
 	const dateHelper = (UTCString) => (new Date(UTCString)).toLocaleDateString();
 
 	const handleChangeRowsPerPage = (event) => {
-		dispatch({type: 'SET_ROWS_PER_PAGE_AMOUNT', amount: Number(event.target.value)});
+		dispatch({type: 'FETCH_REPOS_REQUESTED', rowsPerPage: Number(event.target.value)});
 	}
 
 	const handleChangePage = (event, newPage) => {
@@ -32,7 +33,14 @@ const ReposTable = () => {
 			<Table>
 				<TableHead>
 					<TableRow>
-						<TableCell>Login</TableCell>
+						<TableCell>
+							<TableSortLabel
+								active={orderBy === 'full_name'}
+								direction={sortDirection}>
+								Login
+							</TableSortLabel>
+						</TableCell>
+
 						<TableCell>Language</TableCell>
 						<TableCell>Created at</TableCell>
 						<TableCell>Updated at</TableCell>

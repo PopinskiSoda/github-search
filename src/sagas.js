@@ -24,14 +24,18 @@ function fetchUsersByPrefix(prefix) {
 
 function* getRepos(action) {
 	try {
-		const currentUserLogin = yield select(state => state.reposList.currentUserLogin);
+		const currentUserLogin = yield select(state => state.reposList.currentUser.login);
 		const currentPage = yield select(state => state.reposList.currentPage);
 		const rowsPerPage = yield select(state => state.reposList.rowsPerPage);
+		const orderBy = yield select(state => state.reposList.sort.orderBy);
+		const direction = yield select(state => state.reposList.sort.direction);
 
 		const response = yield call(fetchRepos, {
 			userLogin: action.userLogin || currentUserLogin,
 			page: action.page || currentPage,
-			rowsPerPage: action.rowsPerPage || rowsPerPage
+			rowsPerPage: action.rowsPerPage || rowsPerPage,
+			orderBy: action.orderBy || orderBy,
+			direction: action.direction || direction
 		});
 		yield put({
 			type: 'FETCH_REPOS_SUCCEEDED',
@@ -44,8 +48,9 @@ function* getRepos(action) {
 }
 
 function fetchRepos(options) {
-	const { userLogin, page, rowsPerPage } = options;
-	return fetch(`https://api.github.com/users/${userLogin}/repos?per_page=${rowsPerPage}&page=${page}`)
+	const { userLogin, page, rowsPerPage, orderBy, direction } = options;
+	return fetch(`https://api.github.com/users/${userLogin}/repos?per_page=${rowsPerPage}`
+				 + `&page=${page}&sort=${orderBy}&direction=${direction}`)
 		.then(response =>
 			response.json()
 		);

@@ -1,9 +1,17 @@
 const initState = {
-	users: []
+	users: [],
+	selectedUser: null
 }
 
 const searchReducer = (state = initState, action) => {
 	switch (action.type) {
+
+		case 'FETCH_USERS_REQUESTED':
+			return {
+				...state,
+				selectedUser: action.prefix
+			}
+
 		case 'FETCH_USERS_SUCCEEDED':
 			return {
 				...state,
@@ -14,12 +22,6 @@ const searchReducer = (state = initState, action) => {
 			return {
 				...state,
 				test: 'test'
-			}
-
-		case 'SELECT_USER':
-			return {
-				...state,
-				selectedUser: action.userLogin
 			}
 
 		default: 

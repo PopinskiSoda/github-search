@@ -1,8 +1,5 @@
 const initState = {
-	currentUser: {
-		login: null,
-		avatarUrl: null
-	},
+	avatarUrl: null,
 	currentPage: 1,
 	1: [],
 	rowsPerPage: 5,
@@ -18,9 +15,9 @@ const listReducer = (state = initState, action) => {
 		case 'FETCH_REPOS_REQUESTED':
 			return {
 				...state,
-				currentUser: {
-					...state.currentUser,
-					login: action.userLogin || state.currentUser.login
+				sort: {
+					orderBy: action.orderBy || state.orderBy,
+					direction: action.direction || state.direction
 				},
 				rowsPerPage: action.rowsPerPage || state.rowsPerPage
 			}
@@ -30,10 +27,7 @@ const listReducer = (state = initState, action) => {
 				...state,
 				[action.page]: action.response,
 				currentPage: action.page || state.currentPage,
-				currentUser: {
-					...state.currentUser,
-					avatarUrl: action.response[0].owner.avatar_url
-				} 
+				avatarUrl: action.response[0].owner.avatar_url
 			}
 
 		default:

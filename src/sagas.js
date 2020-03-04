@@ -24,7 +24,7 @@ function fetchUsersByPrefix(prefix) {
 
 function* getRepos(action) {
 	try {
-		const currentUserLogin = yield select(state => state.reposList.currentUser.login);
+		const currentUserLogin = yield select(state => state.usersList.selectedUser);
 		const currentPage = yield select(state => state.reposList.currentPage);
 		const rowsPerPage = yield select(state => state.reposList.rowsPerPage);
 		const orderBy = yield select(state => state.reposList.sort.orderBy);

@@ -28,23 +28,58 @@ const ReposTable = () => {
 		dispatch({type: 'FETCH_REPOS_REQUESTED', page: newPage});
 	}
 
+	const handleChangeSort = (event, orderSelector) => {
+		let direction;
+		if (orderSelector === orderBy) {
+			if (sortDirection === 'asc') {
+				direction = 'desc';
+			} else {
+				direction = 'asc';
+			}
+		} else {
+			direction = 'asc';
+		}
+
+		dispatch({
+			type: 'FETCH_REPOS_REQUESTED',
+			orderBy: orderSelector,
+			direction: direction
+		});
+	}
+
+	const createSortHandler = orderSelector => event => {
+		handleChangeSort(event, orderSelector);
+	}
+
+	const headColumns = [
+		{label: 'Login', orderSelector: 'full_name'},
+		{label: 'Language'},
+		{label: 'Created at', orderSelector: 'created'},
+		{label: 'Updated at', orderSelector: 'updated'},
+		{label: 'Pushed at', orderSelector: 'pushed'},
+	]
+
 	return (
 		<Paper>
 			<Table>
 				<TableHead>
 					<TableRow>
-						<TableCell>
-							<TableSortLabel
-								active={orderBy === 'full_name'}
-								direction={sortDirection}>
-								Login
-							</TableSortLabel>
-						</TableCell>
-
-						<TableCell>Language</TableCell>
-						<TableCell>Created at</TableCell>
-						<TableCell>Updated at</TableCell>
-						<TableCell>Pushed at</TableCell>
+					{headColumns.map(column => {
+						return (
+							<TableCell>
+								{column.orderSelector ? (
+									<TableSortLabel
+										active={orderBy === column.orderSelector}
+										onClick={createSortHandler(column.orderSelector)}
+										direction={sortDirection}>
+										{column.label}
+									</TableSortLabel>
+								) : (
+									column.label
+								)}
+							</TableCell>
+						)
+					})}
 					</TableRow>
 				</TableHead>
 				<TableBody>
@@ -64,6 +99,7 @@ const ReposTable = () => {
 			<TablePagination
 	          rowsPerPageOptions={[5, 10, 25]}
 	          labelRowsPerPage="Репозиториев на странице"
+	          labelDisplayedRows={({from, to}) => `${from - 1} из более чем ${to}`}
 	          component="div"
 	          count={-1}
 	          rowsPerPage={rowsPerPage}

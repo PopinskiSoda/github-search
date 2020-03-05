@@ -58,7 +58,7 @@ const ReposTable = () => {
 	}
 
 	const headColumns = [
-		{label: 'Login', orderSelector: 'full_name'},
+		{label: 'Name', orderSelector: 'full_name'},
 		{label: 'Language'},
 		{label: 'Created at', orderSelector: 'created'},
 		{label: 'Updated at', orderSelector: 'updated'},

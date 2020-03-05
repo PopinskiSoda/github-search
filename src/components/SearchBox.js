@@ -44,6 +44,7 @@ const SearchBox = () => {
 	        disableClearable
 	        onChange={(e, value) => {handleSelect(value)}}
 	        options={users.map(user => user.login)}
+	        style={{marginBottom: '9px'}}
 	        renderInput={params => (
 	          <TextField
 	            {...params}

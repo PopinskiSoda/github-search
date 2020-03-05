@@ -1,6 +1,8 @@
 const initState = {
 	users: [],
-	selectedUser: null
+	searchedUser: null,
+	selectedUser: null,
+	errorMessage: null,
 }
 
 const searchReducer = (state = initState, action) => {
@@ -9,19 +11,26 @@ const searchReducer = (state = initState, action) => {
 		case 'FETCH_USERS_REQUESTED':
 			return {
 				...state,
-				selectedUser: action.prefix
+				searchedUser: action.prefix
 			}
 
 		case 'FETCH_USERS_SUCCEEDED':
 			return {
 				...state,
-				users: action.response.items
+				users: action.response.items,
+				errorMessage: null
 			}
 
 		case 'FETCH_USERS_FAILED':
 			return {
 				...state,
-				test: 'test'
+				errorMessage: action.message
+			}
+
+		case 'SET_SELECTED_USER':
+			return {
+				...state,
+				selectedUser: action.selectedUser 
 			}
 
 		default: 

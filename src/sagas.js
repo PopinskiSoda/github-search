@@ -17,14 +17,21 @@ function* searchUsers(action) {
 }
 
 function fetchUsersByPrefix(prefix) {
-	return fetch(`https://api.github.com/search/users?q=${prefix}`).then(response =>
-		response.json()
+	return fetch(`https://api.github.com/search/users?q=${prefix}`).then(res =>
+		res.json().then(json => {
+			if (res.status >= 200 && res.status <= 300) {
+				return json;
+			} else {
+				throw res;
+			}
+		})
+		.catch(error => {throw error})
 	);
 }
 
 function* getRepos(action) {
 	try {
-		const currentUserLogin = yield select(state => state.usersList.selectedUser);
+		const currentUserLogin = yield select(state => state.usersList.searchedUser);
 		const currentPage = yield select(state => state.reposList.currentPage);
 		const rowsPerPage = yield select(state => state.reposList.rowsPerPage);
 		const orderBy = yield select(state => state.reposList.sort.orderBy);
@@ -43,6 +50,9 @@ function* getRepos(action) {
 			headers: response.headers,
 			page: action.page || currentPage
 		});
+		if (action.userLogin) {
+			yield put({type: 'SET_SELECTED_USER', selectedUser: action.userLogin});
+		}
 	} catch (e) {
 		yield put({type: 'FETCH_REPOS_FAILED', message: e.statusText});
 	}

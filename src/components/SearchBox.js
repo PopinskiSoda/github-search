@@ -30,9 +30,12 @@ const SearchBox = () => {
 		}
 	}, [searchValue, dispatch])
 
-	const handleSelect = () => {
-		if (searchValue.length >= MIN_SEARCH_LENGTH) {
-			dispatch({type: 'FETCH_REPOS_REQUESTED', userLogin: searchValue});
+	const handleSelect = (value) => {
+		let trimmedValue = value.trim();
+
+		if (trimmedValue.length >= MIN_SEARCH_LENGTH) {
+			setSearchValue(trimmedValue);
+			dispatch({type: 'FETCH_REPOS_REQUESTED', userLogin: trimmedValue});
 		}
 	}
 	
@@ -40,11 +43,7 @@ const SearchBox = () => {
 		<Autocomplete
 	        freeSolo
 	        disableClearable
-	        onKeyPress={(e) => {
-	        	if (e.which === RETURN_KEY_CODE) {
-	        		handleSelect()
-	        	}
-	        }}
+	        onChange={(e, value) => {handleSelect(value)}}
 	        options={users.map(user => user.login)}
 	        renderInput={params => (
 	          <TextField

@@ -16,8 +16,8 @@ const listReducer = (state = initState, action) => {
 			return {
 				...state,
 				sort: {
-					orderBy: action.orderBy || state.orderBy,
-					direction: action.direction || state.direction
+					orderBy: action.orderBy || state.sort.orderBy,
+					direction: action.direction || state.sort.direction
 				},
 				rowsPerPage: action.rowsPerPage || state.rowsPerPage
 			}

@@ -8,6 +8,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
+import Link from '@material-ui/core/Link';
 
 const ReposTable = () => {
 	const dispatch = useDispatch();
@@ -86,7 +87,9 @@ const ReposTable = () => {
 					{repos.map((row) => {
 						return (
 							<TableRow key={row.id}>
-								<TableCell>{row.name}</TableCell>
+								<TableCell>
+									<Link href={row.html_url} target="_blank">{row.name}</Link>
+								</TableCell>
 								<TableCell>{row.language}</TableCell>
 								<TableCell>{dateHelper(row.created_at)}</TableCell>
 								<TableCell>{dateHelper(row.updated_at)}</TableCell>

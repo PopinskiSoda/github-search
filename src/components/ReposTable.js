@@ -18,15 +18,20 @@ const ReposTable = () => {
 	const rowsPerPage = useSelector(state => state.reposList.rowsPerPage);
 	const sortDirection = useSelector(state => state.reposList.sort.direction);
 	const orderBy = useSelector(state => state.reposList.sort.orderBy);
+	const lastPage = useSelector(state => state.reposList.lastPage);
 
 	const dateHelper = (UTCString) => (new Date(UTCString)).toLocaleDateString();
 
 	const handleChangeRowsPerPage = (event) => {
-		dispatch({type: 'FETCH_REPOS_REQUESTED', rowsPerPage: Number(event.target.value)});
+		dispatch({
+			type: 'FETCH_REPOS_REQUESTED',
+			rowsPerPage: Number(event.target.value),
+			page: 1
+		});
 	}
 
 	const handleChangePage = (event, newPage) => {
-		dispatch({type: 'FETCH_REPOS_REQUESTED', page: newPage});
+		dispatch({type: 'FETCH_REPOS_REQUESTED', page: newPage + 1});
 	}
 
 	const handleChangeSort = (event, orderSelector) => {
@@ -60,14 +65,25 @@ const ReposTable = () => {
 		{label: 'Pushed at', orderSelector: 'pushed'},
 	]
 
+	const displayedLabelHelper = ({from, to, count}) => {
+		let lastRowNumber;
+
+		if (currentPage !== lastPage) {
+			lastRowNumber = to;
+		} else {
+			lastRowNumber = from + repos.length - 1;
+		}
+		return `${currentPage} стр. (${from}-${lastRowNumber})`
+	}
+
 	return (
 		<Paper>
 			<Table>
 				<TableHead>
 					<TableRow>
-					{headColumns.map(column => {
+					{headColumns.map((column, index) => {
 						return (
-							<TableCell>
+							<TableCell key={index}>
 								{column.orderSelector ? (
 									<TableSortLabel
 										active={orderBy === column.orderSelector}
@@ -102,11 +118,11 @@ const ReposTable = () => {
 			<TablePagination
 	          rowsPerPageOptions={[5, 10, 25]}
 	          labelRowsPerPage="Репозиториев на странице"
-	          labelDisplayedRows={({from, to}) => `${from - 1} из более чем ${to}`}
+	          labelDisplayedRows={displayedLabelHelper}
 	          component="div"
-	          count={-1}
+	          count={rowsPerPage * lastPage}
 	          rowsPerPage={rowsPerPage}
-	          page={currentPage}
+	          page={currentPage - 1}
 	          onChangeRowsPerPage={handleChangeRowsPerPage}
 	          onChangePage={handleChangePage}
 	        />

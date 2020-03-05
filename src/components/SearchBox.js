@@ -10,7 +10,6 @@ const SearchBox = () => {
 	
 	const DELAY = 600;
 	const MIN_SEARCH_LENGTH = 3;
-	const RETURN_KEY_CODE = 13;
 	const searchTimer = useRef(false);
 
 	const handleChange = (value) => {

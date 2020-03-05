@@ -39,11 +39,12 @@ function* getRepos(action) {
 		});
 		yield put({
 			type: 'FETCH_REPOS_SUCCEEDED',
-			response: response,
+			response: response.json,
+			headers: response.headers,
 			page: action.page || currentPage
 		});
 	} catch (e) {
-		yield put({type: 'FETCH_REPOS_FAILED', message: e.message});
+		yield put({type: 'FETCH_REPOS_FAILED', message: e.statusText});
 	}
 }
 
@@ -51,7 +52,17 @@ function fetchRepos(options) {
 	const { userLogin, page, rowsPerPage, orderBy, direction } = options;
 	return fetch(`https://api.github.com/users/${userLogin}/repos?per_page=${rowsPerPage}`
 				 + `&page=${page}&sort=${orderBy}&direction=${direction}`)
-		.then(response =>
-			response.json()
-		);
+		.then(res => {
+			return res.json().then(json => {
+				if (res.status >= 200 && res.status <= 300) {
+					return {
+						headers: res.headers,
+						json: json
+					};
+				} else {
+					throw res;
+				}
+			})
+		})
+		.catch(error => {throw error});
 }
